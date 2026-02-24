@@ -1,0 +1,52 @@
+name: Build and Release Android
+on:
+  push:
+    branches: ["main"]
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+permissions:
+  contents: write
+
+jobs:
+  build_android:
+    name: Setup and Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24.x"
+      - name: Install dependencies
+        run: npm install
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+      - name: Build APK
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=512m"
+        run: eas build --profile preview --platform android --non-interactive --local --output=./paramita-android.apk
+      - name: Generate QR code
+        run: |
+          sudo apt-get install -y qrencode
+          qrencode -o ./qr-code.png -s 6 "https://github.com/${{ github.repository }}/releases/download/${{ github.run_number }}/paramita-android.apk"
+      - name: Create Release and Upload APK
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.run_number }}
+          name: Release ${{ github.run_number }}
+          files: |
+            ./paramita-android.apk
+            ./qr-code.png
+          body: |
+            Scan the QR code to download the APK:
+
+            ![QR Code](https://github.com/${{ github.repository }}/releases/download/${{ github.run_number }}/qr-code.png)
