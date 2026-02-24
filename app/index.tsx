@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { useKeepAwake } from "expo-keep-awake";
+import { useEffect, useState } from "react";
+import { Platform, StyleSheet, Text, View } from "react-native";
+import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
 import { Colors } from "@/constants/colors";
 import { useConfig } from "@/hooks/useConfig";
 import { DateTime } from "@/components/DateTime";
@@ -9,7 +9,11 @@ import { Quote } from "@/components/Quote";
 import { LocationModal } from "@/components/LocationModal";
 
 export default function Dashboard() {
-  useKeepAwake();
+  useEffect(() => {
+    if (Platform.OS === "web") return;
+    activateKeepAwakeAsync();
+    return () => { deactivateKeepAwake(); };
+  }, []);
   const { config, setConfig, loaded } = useConfig();
   const [locationModalVisible, setLocationModalVisible] = useState(false);
 

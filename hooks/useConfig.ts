@@ -22,21 +22,24 @@ export function useConfig() {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    const stored = Storage.getItemSync(CONFIG_KEY);
-    if (stored) {
-      try {
-        setConfigState({ ...defaultConfig, ...JSON.parse(stored) });
-      } catch {
-        // use default
+    Storage.getItem(CONFIG_KEY).then((stored) => {
+      if (stored) {
+        try {
+          setConfigState({ ...defaultConfig, ...JSON.parse(stored) });
+        } catch {
+          // use default
+        }
       }
-    }
-    setLoaded(true);
+      setLoaded(true);
+    }).catch(() => {
+      setLoaded(true);
+    });
   }, []);
 
   const setConfig = useCallback((update: Partial<DashboardConfig>) => {
     setConfigState((prev) => {
       const next = { ...prev, ...update };
-      Storage.setItemSync(CONFIG_KEY, JSON.stringify(next));
+      Storage.setItem(CONFIG_KEY, JSON.stringify(next));
       return next;
     });
   }, []);
