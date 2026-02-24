@@ -3,10 +3,10 @@
     "name": "Paramita",
     "slug": "paramita",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "landscape",
     "icon": "./assets/images/icon.png",
     "scheme": "paramita",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
@@ -39,9 +39,9 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#246583",
+          "backgroundColor": "#FFFFFF",
           "dark": {
-            "backgroundColor": "#246583"
+            "backgroundColor": "#FFFFFF"
           }
         }
       ],
