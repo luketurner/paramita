@@ -1,25 +1,16 @@
 import { StyleSheet, Text, View } from "react-native";
 import { Colors } from "@/constants/colors";
-import type { Quote as QuoteType } from "@/constants/quotes";
+import { defaultQuotes } from "@/constants/quotes";
 
-interface QuoteProps {
-  quotes: QuoteType[];
-}
-
-function getDailyQuoteIndex(quotes: QuoteType[]): number {
-  if (quotes.length === 0) return 0;
+function getDailyQuoteIndex(): number {
   const now = new Date();
   const daysSinceEpoch = Math.floor(now.getTime() / (1000 * 60 * 60 * 24));
-  return daysSinceEpoch % quotes.length;
+  return daysSinceEpoch % defaultQuotes.length;
 }
 
-export function Quote({ quotes }: QuoteProps) {
-  if (quotes.length === 0) {
-    return null;
-  }
-
-  const index = getDailyQuoteIndex(quotes);
-  const quote = quotes[index];
+export function Quote() {
+  const index = getDailyQuoteIndex();
+  const quote = defaultQuotes[index];
 
   return (
     <View style={styles.container}>

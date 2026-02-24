@@ -11,15 +11,12 @@ import {
 import { useRouter } from "expo-router";
 import { Colors } from "@/constants/colors";
 import { useConfig, geocodeZip } from "@/hooks/useConfig";
-import type { Quote } from "@/constants/quotes";
 
 export default function Settings() {
   const { config, setConfig } = useConfig();
   const router = useRouter();
   const [zipInput, setZipInput] = useState(config.locationName);
   const [geocoding, setGeocoding] = useState(false);
-  const [newQuoteText, setNewQuoteText] = useState("");
-  const [newQuoteAuthor, setNewQuoteAuthor] = useState("");
 
   const handleSaveZip = async () => {
     if (!zipInput.trim()) {
@@ -40,24 +37,6 @@ export default function Settings() {
     } else {
       Alert.alert("Error", "Could not find that location. Please try again.");
     }
-  };
-
-  const handleAddQuote = () => {
-    const text = newQuoteText.trim();
-    const author = newQuoteAuthor.trim();
-    if (!text) {
-      Alert.alert("Missing Quote", "Please enter the quote text.");
-      return;
-    }
-    const newQuote: Quote = { text, author: author || "Unknown" };
-    setConfig({ quotes: [...config.quotes, newQuote] });
-    setNewQuoteText("");
-    setNewQuoteAuthor("");
-  };
-
-  const handleRemoveQuote = (index: number) => {
-    const updated = config.quotes.filter((_, i) => i !== index);
-    setConfig({ quotes: updated });
   };
 
   return (
@@ -86,49 +65,6 @@ export default function Settings() {
         <Text style={styles.hint}>
           Current: {config.locationName}
         </Text>
-      </View>
-
-      <Text style={styles.sectionTitle}>Quotes</Text>
-      <View style={styles.card}>
-        <Text style={styles.label}>Add New Quote</Text>
-        <TextInput
-          style={[styles.input, styles.multilineInput]}
-          value={newQuoteText}
-          onChangeText={setNewQuoteText}
-          placeholder="Enter quote text..."
-          placeholderTextColor={Colors.muted}
-          multiline
-        />
-        <TextInput
-          style={styles.input}
-          value={newQuoteAuthor}
-          onChangeText={setNewQuoteAuthor}
-          placeholder="Author (optional)"
-          placeholderTextColor={Colors.muted}
-        />
-        <Pressable style={styles.button} onPress={handleAddQuote}>
-          <Text style={styles.buttonText}>Add Quote</Text>
-        </Pressable>
-      </View>
-
-      <View style={styles.card}>
-        <Text style={styles.label}>
-          Current Quotes ({config.quotes.length})
-        </Text>
-        {config.quotes.map((q, i) => (
-          <View key={i} style={styles.quoteItem}>
-            <View style={styles.quoteContent}>
-              <Text style={styles.quoteText}>&ldquo;{q.text}&rdquo;</Text>
-              <Text style={styles.quoteAuthor}>— {q.author}</Text>
-            </View>
-            <Pressable
-              style={styles.removeButton}
-              onPress={() => handleRemoveQuote(i)}
-            >
-              <Text style={styles.removeText}>✕</Text>
-            </Pressable>
-          </View>
-        ))}
       </View>
 
       <Pressable
@@ -187,10 +123,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     marginBottom: 8,
   },
-  multilineInput: {
-    minHeight: 80,
-    textAlignVertical: "top",
-  },
   button: {
     backgroundColor: Colors.text,
     borderRadius: 8,
@@ -214,33 +146,5 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.muted,
     marginTop: 4,
-  },
-  quoteItem: {
-    flexDirection: "row",
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
-    paddingVertical: 12,
-    gap: 12,
-  },
-  quoteContent: {
-    flex: 1,
-  },
-  quoteText: {
-    fontSize: 16,
-    fontStyle: "italic",
-    color: Colors.text,
-  },
-  quoteAuthor: {
-    fontSize: 14,
-    color: Colors.textSecondary,
-    marginTop: 4,
-  },
-  removeButton: {
-    justifyContent: "center",
-    paddingHorizontal: 8,
-  },
-  removeText: {
-    fontSize: 20,
-    color: Colors.muted,
   },
 });

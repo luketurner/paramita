@@ -1,13 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { Storage } from "expo-sqlite/kv-store";
-import { defaultQuotes, type Quote } from "@/constants/quotes";
 
 export interface DashboardConfig {
   zipCode: string;
   latitude: number | null;
   longitude: number | null;
   locationName: string;
-  quotes: Quote[];
 }
 
 const CONFIG_KEY = "dashboard_config";
@@ -17,7 +15,6 @@ const defaultConfig: DashboardConfig = {
   latitude: 40.7484,
   longitude: -73.9967,
   locationName: "New York, NY",
-  quotes: defaultQuotes,
 };
 
 export function useConfig() {

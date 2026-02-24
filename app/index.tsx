@@ -37,7 +37,7 @@ export default function Dashboard() {
         </View>
       </View>
       <View style={styles.bottomRow}>
-        <Quote quotes={config.quotes} />
+        <Quote />
       </View>
       <Pressable
         style={styles.settingsButton}
