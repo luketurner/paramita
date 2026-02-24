@@ -1,17 +1,17 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import { useRouter } from "expo-router";
+import { useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 import { useKeepAwake } from "expo-keep-awake";
-import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/constants/colors";
 import { useConfig } from "@/hooks/useConfig";
 import { DateTime } from "@/components/DateTime";
 import { Weather } from "@/components/Weather";
 import { Quote } from "@/components/Quote";
+import { LocationModal } from "@/components/LocationModal";
 
 export default function Dashboard() {
   useKeepAwake();
-  const { config, loaded } = useConfig();
-  const router = useRouter();
+  const { config, setConfig, loaded } = useConfig();
+  const [locationModalVisible, setLocationModalVisible] = useState(false);
 
   if (!loaded) {
     return (
@@ -33,18 +33,19 @@ export default function Dashboard() {
             latitude={config.latitude}
             longitude={config.longitude}
             locationName={config.locationName}
+            onLongPress={() => setLocationModalVisible(true)}
           />
         </View>
       </View>
       <View style={styles.bottomRow}>
         <Quote />
       </View>
-      <Pressable
-        style={styles.settingsButton}
-        onPress={() => router.push("/settings")}
-      >
-        <Ionicons name="settings-outline" size={28} color={Colors.muted} />
-      </Pressable>
+      <LocationModal
+        visible={locationModalVisible}
+        onClose={() => setLocationModalVisible(false)}
+        currentLocationName={config.locationName}
+        onSave={(update) => setConfig(update)}
+      />
     </View>
   );
 }
@@ -71,12 +72,6 @@ const styles = StyleSheet.create({
   },
   bottomRow: {
     paddingBottom: 16,
-  },
-  settingsButton: {
-    position: "absolute",
-    bottom: 16,
-    right: 24,
-    padding: 8,
   },
   loadingText: {
     fontSize: 24,

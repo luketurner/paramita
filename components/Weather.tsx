@@ -10,9 +10,10 @@ interface WeatherProps {
   latitude: number | null;
   longitude: number | null;
   locationName: string;
+  onLongPress?: () => void;
 }
 
-export function Weather({ latitude, longitude, locationName }: WeatherProps) {
+export function Weather({ latitude, longitude, locationName, onLongPress }: WeatherProps) {
   const { data, isLoading, isError, refresh, dataUpdatedAt } = useWeather(
     latitude,
     longitude
@@ -20,11 +21,11 @@ export function Weather({ latitude, longitude, locationName }: WeatherProps) {
 
   if (latitude == null || longitude == null) {
     return (
-      <View style={styles.container}>
+      <Pressable style={styles.container} onLongPress={onLongPress}>
         <Text style={styles.errorText}>
-          Set your zip code in settings to see weather
+          Long-press to set your location
         </Text>
-      </View>
+      </Pressable>
     );
   }
 
@@ -39,7 +40,7 @@ export function Weather({ latitude, longitude, locationName }: WeatherProps) {
 
   if (isError && !data) {
     return (
-      <Pressable style={styles.container} onPress={refresh}>
+      <Pressable style={styles.container} onPress={refresh} onLongPress={onLongPress}>
         <Text style={styles.errorText}>Failed to load weather</Text>
         <Text style={styles.tapHint}>Tap to retry</Text>
       </Pressable>
@@ -56,7 +57,7 @@ export function Weather({ latitude, longitude, locationName }: WeatherProps) {
     : "";
 
   return (
-    <Pressable style={styles.container} onPress={refresh}>
+    <Pressable style={styles.container} onPress={refresh} onLongPress={onLongPress}>
       <Text style={styles.location}>{locationName}</Text>
       <Text style={styles.icon}>{getWeatherIcon(data.weatherCode)}</Text>
       <Text style={styles.temperature}>{data.temperature}°F</Text>
