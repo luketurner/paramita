@@ -50,7 +50,7 @@
       [
         "expo-notifications",
         {
-          "sounds": ["./assets/audio/bell.mp3"]
+          "sounds": []
         }
       ],
       "expo-audio",
