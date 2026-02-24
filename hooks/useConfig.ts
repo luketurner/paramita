@@ -48,18 +48,22 @@ export function useConfig() {
 }
 
 export async function geocodeZip(
-  zip: string
+  query: string
 ): Promise<{ lat: number; lon: number; name: string } | null> {
   try {
-    const res = await fetch(`https://api.zippopotam.us/us/${zip}`);
+    const res = await fetch(
+      `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=1&language=en&format=json`
+    );
     if (!res.ok) return null;
     const data = await res.json();
-    const place = data.places?.[0];
-    if (!place) return null;
+    const result = data.results?.[0];
+    if (!result) return null;
     return {
-      lat: parseFloat(place.latitude),
-      lon: parseFloat(place.longitude),
-      name: `${place["place name"]}, ${place["state abbreviation"]}`,
+      lat: result.latitude,
+      lon: result.longitude,
+      name: result.admin1
+        ? `${result.name}, ${result.admin1}`
+        : result.name,
     };
   } catch {
     return null;

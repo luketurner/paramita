@@ -16,29 +16,29 @@ import type { Quote } from "@/constants/quotes";
 export default function Settings() {
   const { config, setConfig } = useConfig();
   const router = useRouter();
-  const [zipInput, setZipInput] = useState(config.zipCode);
+  const [zipInput, setZipInput] = useState(config.locationName);
   const [geocoding, setGeocoding] = useState(false);
   const [newQuoteText, setNewQuoteText] = useState("");
   const [newQuoteAuthor, setNewQuoteAuthor] = useState("");
 
   const handleSaveZip = async () => {
-    if (!/^\d{5}$/.test(zipInput)) {
-      Alert.alert("Invalid Zip", "Please enter a 5-digit US zip code.");
+    if (!zipInput.trim()) {
+      Alert.alert("Invalid Location", "Please enter a city or location name.");
       return;
     }
     setGeocoding(true);
-    const result = await geocodeZip(zipInput);
+    const result = await geocodeZip(zipInput.trim());
     setGeocoding(false);
     if (result) {
       setConfig({
-        zipCode: zipInput,
+        zipCode: zipInput.trim(),
         latitude: result.lat,
         longitude: result.lon,
         locationName: result.name,
       });
       Alert.alert("Location Updated", `Set to ${result.name}`);
     } else {
-      Alert.alert("Error", "Could not find that zip code. Please try again.");
+      Alert.alert("Error", "Could not find that location. Please try again.");
     }
   };
 
@@ -64,15 +64,13 @@ export default function Settings() {
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
       <Text style={styles.sectionTitle}>Location</Text>
       <View style={styles.card}>
-        <Text style={styles.label}>Zip Code</Text>
+        <Text style={styles.label}>Location</Text>
         <View style={styles.row}>
           <TextInput
             style={styles.input}
             value={zipInput}
             onChangeText={setZipInput}
-            keyboardType="number-pad"
-            maxLength={5}
-            placeholder="e.g. 10001"
+            placeholder="e.g. New York"
             placeholderTextColor={Colors.muted}
           />
           <Pressable
@@ -86,7 +84,7 @@ export default function Settings() {
           </Pressable>
         </View>
         <Text style={styles.hint}>
-          Current: {config.locationName} ({config.zipCode})
+          Current: {config.locationName}
         </Text>
       </View>
 
