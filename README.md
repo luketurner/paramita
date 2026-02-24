@@ -24,8 +24,9 @@ Paramita is not distributed on the Google Play Store. To install it, you need to
 1. Install the app on your eInk device.
 2. Disable all other screen UX (navigation bar, NavOrb)
 3. Disable Auto Sleep and Power-Off Timeout.
-4. Launch the app and put your device in landscape mode (I use the case as a stand).
-5. Ideally, plug it in. Otherwise you'll need to regularly recharge it.
+4. Set "Taps to Refresh" to zero to maintain a clean display when updating weather, etc.
+5. Launch the app and put your device in landscape mode (I use the case as a stand).
+6. Ideally, plug it in. Otherwise you'll need to regularly recharge it.
 
 ## Development
 
