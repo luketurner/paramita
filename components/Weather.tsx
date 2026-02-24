@@ -42,7 +42,6 @@ export function Weather({ latitude, longitude, locationName, onLongPress }: Weat
     return (
       <Pressable style={styles.container} onPress={refresh} onLongPress={onLongPress}>
         <Text style={styles.errorText}>Failed to load weather</Text>
-        <Text style={styles.tapHint}>Tap to retry</Text>
       </Pressable>
     );
   }
@@ -68,15 +67,13 @@ export function Weather({ latitude, longitude, locationName, onLongPress }: Weat
         <Text style={styles.detailText}>
           H: {data.highTemp}° L: {data.lowTemp}°
         </Text>
-        <Text style={styles.detailText}>
-          Wind: {data.windSpeed} mph
-        </Text>
-        <Text style={styles.detailText}>
-          Humidity: {data.humidity}%
-        </Text>
+        {data.precipitationProbability > 0 && (
+          <Text style={styles.detailText}>
+            Rain: {data.precipitationProbability}%
+          </Text>
+        )}
       </View>
       <Text style={styles.updated}>Updated {updatedAt}</Text>
-      <Text style={styles.tapHint}>Tap to refresh</Text>
     </Pressable>
   );
 }
@@ -122,11 +119,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: Colors.muted,
     marginTop: 16,
-  },
-  tapHint: {
-    fontSize: 14,
-    color: Colors.muted,
-    marginTop: 4,
   },
   loadingText: {
     fontSize: 20,

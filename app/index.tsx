@@ -31,7 +31,6 @@ export default function Dashboard() {
         <View style={styles.dateTimePanel}>
           <DateTime />
         </View>
-        <View style={styles.divider} />
         <View style={styles.weatherPanel}>
           <Weather
             latitude={config.latitude}
@@ -65,11 +64,6 @@ const styles = StyleSheet.create({
   },
   dateTimePanel: {
     flex: 1,
-  },
-  divider: {
-    width: 2,
-    backgroundColor: Colors.border,
-    marginVertical: 32,
   },
   weatherPanel: {
     flex: 1,

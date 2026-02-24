@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View } from "react-native";
 import { Colors } from "@/constants/colors";
 import { defaultQuotes } from "@/constants/quotes";
+import { StyleSheet, Text, View } from "react-native";
 
 function getDailyQuoteIndex(): number {
   const now = new Date();
@@ -28,8 +28,6 @@ const styles = StyleSheet.create({
     paddingVertical: 24,
   },
   quoteBox: {
-    borderTopWidth: 2,
-    borderTopColor: Colors.border,
     paddingTop: 24,
   },
   quoteText: {
@@ -44,6 +42,5 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     color: Colors.textSecondary,
     marginTop: 12,
-    textAlign: "right",
   },
 });

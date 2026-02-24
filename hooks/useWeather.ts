@@ -3,8 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 export interface WeatherData {
   temperature: number;
   weatherCode: number;
-  windSpeed: number;
-  humidity: number;
+  precipitationProbability: number;
   highTemp: number;
   lowTemp: number;
 }
@@ -67,11 +66,10 @@ async function fetchWeather(
   url.searchParams.set("longitude", lon.toString());
   url.searchParams.set(
     "current",
-    "temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m"
+    "temperature_2m,weather_code"
   );
-  url.searchParams.set("daily", "temperature_2m_max,temperature_2m_min");
+  url.searchParams.set("daily", "temperature_2m_max,temperature_2m_min,precipitation_probability_max");
   url.searchParams.set("temperature_unit", "fahrenheit");
-  url.searchParams.set("wind_speed_unit", "mph");
   url.searchParams.set("timezone", "auto");
   url.searchParams.set("forecast_days", "1");
 
@@ -82,8 +80,7 @@ async function fetchWeather(
   return {
     temperature: Math.round(data.current.temperature_2m),
     weatherCode: data.current.weather_code,
-    windSpeed: Math.round(data.current.wind_speed_10m),
-    humidity: data.current.relative_humidity_2m,
+    precipitationProbability: data.daily.precipitation_probability_max[0] ?? 0,
     highTemp: Math.round(data.daily.temperature_2m_max[0]),
     lowTemp: Math.round(data.daily.temperature_2m_min[0]),
   };
